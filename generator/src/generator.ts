@@ -6,7 +6,7 @@ import { logger } from "./utils/logger"; // Logging
 import { getAddress, parseUnits, solidityKeccak256 } from "ethers/lib/utils"; // Ethers utils
 
 // Output file path
-const outputPath: string = path.join(__dirname, "../merkle.json");
+let outputPath: string = path.join(__dirname, "../merkle.json");
 
 // Airdrop recipient addresses and scaled token values
 type AirdropRecipient = {
@@ -25,7 +25,9 @@ export default class Generator {
    * @param {number} decimals of token
    * @param {Record<string, number>} airdrop address to token claim mapping
    */
-  constructor(decimals: number, airdrop: Record<string, number>) {
+  constructor(decimals: number, airdrop: Record<string, number>, path: string) {
+    outputPath = path;
+
     // For each airdrop entry
     for (const [address, tokens] of Object.entries(airdrop)) {
       // Push:
@@ -80,6 +82,6 @@ export default class Generator {
         tree: merkleTree
       })
     );
-    logger.info("Generated merkle tree and root saved to Merkle.json.");
+    logger.info(`Generated merkle tree and root saved to ${outputPath}.`);
   }
 }
